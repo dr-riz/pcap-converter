@@ -1,22 +1,26 @@
 from __future__ import print_function, division
 from subprocess import check_call
 # from CythonUtil import c_parse_records_tshark
+ 
 
+#<start time stamp> <src ip> <src port> <dst ip> <dst port> <protocol> <flow size> <num packets> <flow duration>
 def parse_records_tshark(f_name):
     records = []
-    NAME = ['start_time', 'src_ip', 'dst_ip', 'protocol', 'length',
-            'src_port', 'dst_port']
+    NAME = ['start_time', 'src_ip', 'src_port', 'dst_ip', 'dst_port','protocol', 'length']
     with open(f_name, 'r') as infile:
         for line in infile:
             line = line.strip()
+            # print(line)
             items = line.split()
-            rec = (float(items[1]), items[2], items[4], items[5], items[6],
-                    int(items[7]), int(items[8]))
+            rec = (float(items[0]), items[1], items[2], items[3], items[4],
+                    items[5], int(items[6]))
             records.append(rec)
     return records, NAME
 
 def export_to_txt(f_name, txt_f_name):
-    cmd = """tshark -o column.format:'"No.", "%%m", "Time", "%%t", "Source", "%%s", "Destination", "%%d", "Protocol", "%%p", "len", "%%L", "srcport", "%%uS", "dstport", "%%uD"' -r %s > %s""" % (f_name, txt_f_name)
+    # cmd = """tshark -o column.format:'"No.", "%%m", "Time", "%%t", "Source", "%%s", "Destination", "%%d", "Protocol", "%%p", "len", "%%L", "srcport", "%%uS", "dstport", "%%uD"' -r %s > %s""" % (f_name, txt_f_name)
+    # cmd = """tshark -o column.format:'"No.", "%%m", "Time", "%%t", "Source", "%%s", "Destination", "%%d", "Protocol", "%%p", "len", "%%L", "srcport", "%%uS", "dstport", "%%uD"' -r %s > %s""" % (f_name, txt_f_name)
+    cmd = """tshark -o column.format:'"Time", "%%t","Source", "%%s", "srcport", "%%uS", "Destination", "%%d", "dstport", "%%uD", "Protocol", "%%p", "len", "%%L"' -r %s > %s""" % (f_name, txt_f_name)
 
     print('--> ', cmd)
     check_call(cmd, shell=True)
@@ -25,8 +29,8 @@ def export_to_txt(f_name, txt_f_name):
 def change_to_flows(records, name, time_out):
     t_seq = name.index('start_time')
     length_seq = name.index('length')
-    # five_tuple_seq = [name.index(k) for k in ['src_ip', 'src_port', 'dst_ip', 'dst_port', 'protocol']]
-    five_tuple_seq = [name.index(k) for k in ['src_ip', 'dst_ip', 'protocol']]
+    five_tuple_seq = [name.index(k) for k in ['src_ip', 'src_port', 'dst_ip', 'dst_port', 'protocol']]
+    # five_tuple_seq = [name.index(k) for k in ['src_ip', 'dst_ip', 'protocol']]
     open_flows = dict()
     res_flow = []
     for rec in records:
