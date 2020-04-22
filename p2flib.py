@@ -40,20 +40,22 @@ def change_to_flows(records, name, time_out):
         length = rec[length_seq]
         # check time out
         remove_flows = []
-        for f_tuple, (st_time, last_time, fs) in open_flows.iteritems():
+        count = 0
+        for f_tuple, (st_time, last_time, last_count, fs) in open_flows.iteritems():
             if t - last_time > time_out: # time out
                 fd = t - st_time
-                res_flow.append( (st_time, ) + f_tuple + (fs, fd))
+                # last_count += 1
+                res_flow.append( (st_time, ) + f_tuple + (fs, last_count, fd))
                 remove_flows.append(f_tuple)
         for f_tuple in remove_flows:
             del open_flows[f_tuple]
 
         stored_rec = open_flows.get(five_tuple, None)
         if stored_rec is not None: # if already exists
-            (st_time_old, last_time_old, fs_old) = stored_rec
-            open_flows[five_tuple] = (st_time_old, t, fs_old + length)
+            (st_time_old, last_time_old, last_count_old, fs_old) = stored_rec
+            open_flows[five_tuple] = (st_time_old, t, last_count_old+1, fs_old + length)
         else: # not exisit
-            open_flows[five_tuple] = (t, t, length)
+            open_flows[five_tuple] = (t, t, 1, length)
 
     print("""
 Total Packets: [%i]

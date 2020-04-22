@@ -6,13 +6,16 @@ This tool provides two functionality:
 
 txt format
 -------------------
-1   0.000000 51.142.253.91 -> 15.236.229.88 TCP 54 2555 22746
-<seq no> <time stamp> <src ip> -> <dst ip> <protocol> <pkt size> <src port> <dst port>
+0.000000 51.142.253.91 2555 15.236.229.88 22746 TCP 54
+<start time stamp> <src ip> <src port> <dst ip> <dst port> <protocol> <flow size> 
+
+We can also directly get the above with running tshark directly and without using the wrapper scripts
+tshark -o column.format:'"Time", "%t","Source", "%s", "srcport", "%uS", "Destination", "%d", "dstport", "%uD", "Protocol", "%p", "len", "%L"' -r ./tests/dosattack.pcap 
 
 flow format
 --------------------
-0.000429 238.227.214.84 147.47.105.20 TCP 54 0.014504
-<start time stamp> <src ip> <dst ip> <protocol> <flow size> <flow duration>
+0.00151 72.251.163.69 46514 163.80.218.80 54782 TCP 54 1 0.013423
+<start time stamp> <src ip> <src port> <dst ip> <dst port> <protocol> <flow size> <num packets> <flow duration>
 
 
 Dependency
@@ -20,6 +23,11 @@ Dependency
 tshark
 
 http://www.wireshark.org/docs/man-pages/tshark.html
+
+tshark options
+https://stackoverflow.com/questions/26049157/formatting-tshark-output
+https://www.cellstream.com/reference-reading/tipsandtricks/272-t-shark-usage-examples
+
 
 You can install tshark easily in ubuntu
 
@@ -40,5 +48,13 @@ Type the following commands for more help
 
 Authors
 ====================
-    Jing Conan Wang
+    Jing Conan Wang (original)
     wangjing AT bu.edu
+
+    Rizwan Mian (forker)
+    dr.rizz AT dataplusplus dot ca
+
+TODO
+====================
+	clean up code
+	write unit tests
