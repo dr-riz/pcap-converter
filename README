@@ -1,14 +1,3 @@
-I took Mark's pointer:  https://www.appneta.com/blog/how-to-easily-capture-tcp-conversation-streams/
-
-and patched with pcap-converter to get full TCP conversations.
-
-I did quick testing on fuzz-2006-07-05-6279.pcap, a sample file of around 7mb from https://www.wireshark.org/download/automated/captures/ 
-
-I share a sample output below (+ header). I pushed my code changes to repo: https://github.com/dr-riz/pcap-converter.git
-
-I'll update the repo documentation soon.
-
-
 Description
 ====================
 This tool converts pcap file to textual netflows that is inclusive of TCP conversations [pcap-to-flow.py]. It does this by hacking together Team AppNeta's and Wang's works that respectively captures TCP Conversation Streams and converts to textual netflows.
