@@ -1,22 +1,26 @@
+I took Mark's pointer:  https://www.appneta.com/blog/how-to-easily-capture-tcp-conversation-streams/
+
+and patched with pcap-converter to get full TCP conversations.
+
+I did quick testing on fuzz-2006-07-05-6279.pcap, a sample file of around 7mb from https://www.wireshark.org/download/automated/captures/ 
+
+I share a sample output below (+ header). I pushed my code changes to repo: https://github.com/dr-riz/pcap-converter.git
+
+I'll update the repo documentation soon.
+
+
 Description
 ====================
-This tool provides two functionality:
-    - convert binary pcap file to text files [pcap-to-txt.py]
-    - convert pcap file to netflows [pcap-to-flow.py]
+This tool converts pcap file to textual netflows that is inclusive of TCP conversations [pcap-to-flow.py]. It does this by hacking together Team AppNeta's and Wang's works that respectively captures TCP Conversation Streams and converts to textual netflows.
 
-txt format
--------------------
-0.000000 51.142.253.91 2555 15.236.229.88 22746 TCP 54
-<start time stamp> <src ip> <src port> <dst ip> <dst port> <protocol> <flow size> 
+Team AppNeta's work is posted at: https://www.appneta.com/blog/how-to-easily-capture-tcp-conversation-streams/
 
-We can also directly get the above with running tshark directly and without using the wrapper scripts
-tshark -o column.format:'"Time", "%t","Source", "%s", "srcport", "%uS", "Destination", "%d", "dstport", "%uD", "Protocol", "%p", "len", "%L"' -r ./tests/dosattack.pcap 
+I did quick testing on fuzz-2006-07-05-6279.pcap, a sample file of around 7mb from https://www.wireshark.org/download/automated/captures/ 
 
 flow format
 --------------------
 0.00151 72.251.163.69 46514 163.80.218.80 54782 TCP 54 1 0.013423
 <start time stamp> <src ip> <src port> <dst ip> <dst port> <protocol> <flow size> <num packets> <flow duration>
-
 
 Dependency
 =====================
@@ -38,12 +42,12 @@ Usage
 =====================
 
     $ ./pcap-to-flow.py -p ./tests/dosattack.pcap -t 0.01
-    $ ./pcap-to-txt.py -i ./tests/dosattack.pcap
+
+
 
 Type the following commands for more help
     
     $ ./pcap-to-flow.py -h
-    $ ./pcap-to-txt.py -h
     
 
 Authors

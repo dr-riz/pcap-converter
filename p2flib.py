@@ -31,7 +31,7 @@ def export_to_txt(f_name, txt_f_name):
     print('--> ', cmd)
     try:
         ret = check_call(cmd, shell=True)
-        print('pcap to text converted with full tcp conv ' + prefix + txt_f_name)
+        print('pcap to text converted with full tcp conv ' + 'full_conv_' + txt_f_name)
     except CalledProcessError as e: # non-zero return; ignore
         pass
 
