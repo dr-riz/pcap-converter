@@ -1,32 +1,41 @@
 from __future__ import print_function, division
 from subprocess import check_call
+from subprocess import CalledProcessError
 # from CythonUtil import c_parse_records_tshark
  
 
 #<start time stamp> <src ip> <src port> <dst ip> <dst port> <protocol> <flow size> <num packets> <flow duration>
 def parse_records_tshark(f_name):
+    print('parse_records_tshark')
     records = []
     NAME = ['start_time', 'src_ip', 'src_port', 'dst_ip', 'dst_port','protocol', 'length']
+    skipped = 0
     with open(f_name, 'r') as infile:
         for line in infile:
             line = line.strip()
             # print(line)
             items = line.split()
+            if(len(items) < 7): # not a standard entry
+                skipped += 1
+                continue
+
             rec = (float(items[0]), items[1], items[2], items[3], items[4],
                     items[5], int(items[6]))
             records.append(rec)
-    return records, NAME
+            # print(str(skipped) + ' records')
+    return records, NAME, skipped
 
 def export_to_txt(f_name, txt_f_name):
-    # cmd = """tshark -o column.format:'"No.", "%%m", "Time", "%%t", "Source", "%%s", "Destination", "%%d", "Protocol", "%%p", "len", "%%L", "srcport", "%%uS", "dstport", "%%uD"' -r %s > %s""" % (f_name, txt_f_name)
-    # cmd = """tshark -o column.format:'"No.", "%%m", "Time", "%%t", "Source", "%%s", "Destination", "%%d", "Protocol", "%%p", "len", "%%L", "srcport", "%%uS", "dstport", "%%uD"' -r %s > %s""" % (f_name, txt_f_name)
     cmd = """tshark -o column.format:'"Time", "%%t","Source", "%%s", "srcport", "%%uS", "Destination", "%%d", "dstport", "%%uD", "Protocol", "%%p", "len", "%%L"' -r %s > %s""" % (f_name, txt_f_name)
 
     print('--> ', cmd)
-    check_call(cmd, shell=True)
+    try:
+        ret = check_call(cmd, shell=True)
+    except CalledProcessError as e:
+        pass
 
 
-def change_to_flows(records, name, time_out):
+def change_to_flows(records, name, time_out, skipped):
     t_seq = name.index('start_time')
     length_seq = name.index('length')
     five_tuple_seq = [name.index(k) for k in ['src_ip', 'src_port', 'dst_ip', 'dst_port', 'protocol']]
@@ -61,7 +70,8 @@ def change_to_flows(records, name, time_out):
 Total Packets: [%i]
 Exported Flows: [%i]
 Open Flows: [%i]
-            """%(len(records), len(res_flow), len(open_flows)))
+pcap records skipped: [%i]
+            """%(len(records), len(res_flow), len(open_flows), skipped))
 
     return res_flow
 
@@ -74,8 +84,9 @@ def write_flow(flows, f_name):
 def pcap2flow(pcap_file_name, flow_file_name, time_out):
     txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_tshark.txt'
     export_to_txt(pcap_file_name, txt_f_name)
-    records, name = parse_records_tshark(txt_f_name)
-    res_flows = change_to_flows(records, name, time_out)
+    print(txt_f_name)
+    records, name, skipped = parse_records_tshark(txt_f_name)
+    res_flows = change_to_flows(records, name, time_out, skipped)
     write_flow(res_flows, flow_file_name)
 
 
