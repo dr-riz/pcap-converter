@@ -41,9 +41,11 @@ sudo apt-get install tshark
 Usage
 =====================
 
-    $ ./pcap-to-flow.py -p ./tests/dosattack.pcap -t 0.01
+    $ ./pcap-to-flow.py -p dosattack.pcap -t 0.01
 
+This will create 3 files: (1) full_conv_dosattack.pcap, (2) full_conv_dosattack_tshark.txt, and (3) full_conv_dosattack.flow
 
+(3) is the required file.
 
 Type the following commands for more help
     
