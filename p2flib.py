@@ -31,7 +31,8 @@ def export_to_txt(f_name, txt_f_name):
     print('--> ', cmd)
     try:
         ret = check_call(cmd, shell=True)
-    except CalledProcessError as e:
+        print('pcap to text converted with full tcp conv ' + prefix + txt_f_name)
+    except CalledProcessError as e: # non-zero return; ignore
         pass
 
 
@@ -82,11 +83,25 @@ def write_flow(flows, f_name):
     fid.close()
 
 def pcap2flow(pcap_file_name, flow_file_name, time_out):
+    # txt_f_name = generate_full_con(pcap_file_name)
+    print('generate .pcap file with full TCP flows')
+    cmd = './filter-full-conv.sh ' + pcap_file_name
+
+    prefix = 'full_conv_'
+    print('--> ', cmd)
+    try:
+        ret = check_call(cmd, shell=True)
+        print('text to flow converted with full tcp conv ' + prefix + pcap_file_name)
+    except CalledProcessError as e: # non-zero return; ignore
+        pass
+
     txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_tshark.txt'
+    txt_f_name = prefix + txt_f_name
+
     export_to_txt(pcap_file_name, txt_f_name)
-    print(txt_f_name)
     records, name, skipped = parse_records_tshark(txt_f_name)
     res_flows = change_to_flows(records, name, time_out, skipped)
-    write_flow(res_flows, flow_file_name)
+    write_flow(res_flows, prefix + flow_file_name)
+
 
 
