@@ -9,7 +9,7 @@ I did quick testing on fuzz-2006-07-05-6279.pcap, a sample file of around 7mb fr
 flow format
 --------------------
 0.00151 72.251.163.69 46514 163.80.218.80 54782 TCP 54 1 0.013423
-<start time stamp> <src ip> <src port> <dst ip> <dst port> <protocol> <flow size> <num packets> <flow duration>
+<start time stamp> <datetime> <src ip> <src port> <dst ip> <dst port> <protocol> <flow size> <num packets> <flow duration>
 
 Dependency
 =====================
@@ -32,9 +32,15 @@ Usage
 
     $ ./pcap-to-flow.py -p dosattack.pcap -t 0.01
 
-This will create 3 files: (1) full_conv_dosattack.pcap, (2) full_conv_dosattack_tshark.txt, and (3) full_conv_dosattack.flow
+This will create 3 files: (1) full_conv_dosattack.pcap, (2) full_conv_dosattack_tshark.txt, (3) full_conv_dosattack.flow, and (4) dosattack.pcap.skipped
 
 (3) is the required file.
+(4) contains the skipped entries.
+
+Total Packets: [100]
+Exported Flows: [41]
+Open Flows: [59]
+pcap records skipped: [0]
 
 Type the following commands for more help
     
