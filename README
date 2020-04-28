@@ -30,18 +30,17 @@ sudo apt-get install tshark
 Usage
 =====================
 
-    $ ./pcap-to-flow.py -p dosattack.pcap
+    $ ./pcap-to-flow.py -p dosattack.pcap -t 0.01
 
-This will create 4 files: (1) full_conv_dosattack.pcap, (2) full_conv_dosattack_tshark.txt, (3) full_conv_dosattack.flow, and (4) dosattack.pcap.skipped
+where '-t' is the timeout session in seconds, and lower number goes more closed sessions. This will create 4 files: (1) full_conv_dosattack.pcap, (2) full_conv_dosattack_tshark.txt, (3) full_conv_dosattack.flow.csv, and (4) dosattack.pcap.skipped
 
-(3) is the required file with full TCP conversation. It also includes UDP, LDAP and other protocols.
-(4) contains the skipped entries. It usually contains low-level protocols, 
+(3) is the required file with full TCP conversations. It also includes UDP, LDAP and other layer-4 protocols.
+(4) contains the skipped entries. It usually contains low-level protocols.
 
-Total Packets: [100]
-Exported Flows: [41]
-Open Flows: [59]
-pcap records skipped: [0]
-
+========== Summary ========== 
+total packets = 100, exported flows = 41. open flows = 59, skipped = 0
+text to flow converted with full tcp conv: full_conv_dosattack.flow.csv
+skipped packet metadata in: dosattack.pcap.skipped
 Type the following commands for more help
     
     $ ./pcap-to-flow.py -h
@@ -57,5 +56,6 @@ Authors
 
 TODO
 ====================
-	clean up code
-	write unit tests
+	- scope the timeout to connection-oriented or TCP-like protocols
+	- clean up code
+	- write unit tests
