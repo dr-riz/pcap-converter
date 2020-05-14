@@ -112,8 +112,9 @@ def pcap2flow(pcap_file_name, flow_file_name, time_out):
         print("non-zero exit on cmd with code = " + str(e.returncode) + ", and message:\n" + str(e.output))
         pass
 
+    pcap_file_name = prefix + pcap_file_name
     txt_f_name = pcap_file_name.rsplit('.pcap')[0] + '_tshark.txt'
-    txt_f_name = prefix + txt_f_name
+    # txt_f_name = prefix + txt_f_name
 
     export_to_txt(pcap_file_name, txt_f_name)
     records, name, skipped = parse_records_tshark(txt_f_name)
