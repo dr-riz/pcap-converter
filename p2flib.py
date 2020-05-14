@@ -68,7 +68,7 @@ def change_to_flows(records, name, time_out, skip_count):
         remove_flows = []
         count = 0
         # for key, value
-        for f_tuple, (st_time, date, time, last_time, last_count, fs) in open_flows.iteritems():
+        for f_tuple, (st_time, date, time, last_time, last_count, fs) in open_flows.items():
             # print('t = ' + str(t) + ', last_time = ' + str(last_time) + ', time_out = ' + str(time_out))
             if t - last_time > time_out: # time out
                 fd = t - st_time
