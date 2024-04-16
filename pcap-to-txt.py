@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """ An simple script to export flow, for test use only
 """
-from __future__ import print_function, division
 from p2flib import *
 
 if __name__ == "__main__":

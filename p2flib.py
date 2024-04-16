@@ -1,4 +1,3 @@
-from __future__ import print_function, division
 from subprocess import check_call
 from subprocess import CalledProcessError
 import subprocess

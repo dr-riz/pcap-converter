@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 """ An simple script to convert pcap files to netflows.
 """
-from __future__ import print_function, division
 from p2flib import *
 import os
 def loop_folder(folder_name, time_out):
