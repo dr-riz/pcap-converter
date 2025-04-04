@@ -35,7 +35,7 @@ def export_to_txt(f_name, txt_f_name):
 
     print('--> ', cmd)
     try:
-        ret = check_call(cmd, shell=True)
+        ret = check_call(cmd, shell=False)
         print('pcap to text converted with full tcp conv: ' + txt_f_name)
     except CalledProcessError as e: # non-zero return; ignore
         print("non-zero exit on cmd with code = " + str(e.returncode) + ", and message:\n" + str(e.output))
@@ -106,7 +106,7 @@ def pcap2flow(pcap_file_name, flow_file_name, time_out):
     prefix = 'full_conv_'
     print('--> ', cmd)
     try:
-        ret = check_call(cmd, shell=True, stderr=subprocess.PIPE)
+        ret = check_call(cmd, shell=False, stderr=subprocess.PIPE)
         print(pcap_file_name + ' converted to full tcp pcap: ' + prefix + pcap_file_name)
     except CalledProcessError as e: # non-zero return; ignore
         print("non-zero exit on cmd with code = " + str(e.returncode) + ", and message:\n" + str(e.output))
